@@ -9,15 +9,18 @@ from typing import Optional
 
 import tcod
 
-import color
-from engine import Engine
-import entity_factories
-from game_map import GameWorld
-import input_handlers
-
+from . import color
+from .engine import Engine
+from .entity_generation import entity_factories as entity_factories
+from .game_map import GameWorld
+from . import input_handlers
+print("Imported")
 
 # Load the background image and remove the alpha channel.
-background_image = tcod.image.load("menu_background.png")[:, :, :3]
+import pathlib
+parent_path = pathlib.Path(__file__).parent.resolve()
+background_image = tcod.image.load(str(parent_path) + "\\" + "menu_background.png")[:, :, :3]
+print("loaded")
 
 
 def new_game() -> Engine:

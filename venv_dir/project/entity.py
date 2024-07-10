@@ -4,7 +4,7 @@ import copy
 import math
 from typing import Optional, Tuple, Type, TypeVar, TYPE_CHECKING, Union
 
-from render_order import RenderOrder
+from .render_order import RenderOrder
 
 if TYPE_CHECKING:
     from components.ai import BaseAI
@@ -14,7 +14,7 @@ if TYPE_CHECKING:
     from components.fighter import Fighter
     from components.inventory import Inventory
     from components.level import Level
-    from game_map import GameMap
+    from .game_map import GameMap
 
 T = TypeVar("T", bound="Entity")
 

@@ -5,13 +5,13 @@ from typing import Dict, Iterator, List, Tuple, TYPE_CHECKING
 
 import tcod
 
-import entity_factories
-from game_map import GameMap
-import tile_types
+from .entity_generation import entity_factories
+from .game_map import GameMap
+from . import tile_types
 
 if TYPE_CHECKING:
-    from engine import Engine
-    from entity import Entity
+    from .engine import Engine
+    from .entity import Entity
 
 max_items_by_floor = [
     (1, 1),

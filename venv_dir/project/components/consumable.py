@@ -2,20 +2,20 @@ from __future__ import annotations
 
 from typing import Optional, TYPE_CHECKING
 
-import actions
-import color
-import components.ai
-import components.inventory
-from components.base_component import BaseComponent
-from exceptions import Impossible
-from input_handlers import (
+from .. import actions
+from .. import color
+from . import ai
+from . import inventory as components_inventory
+from .base_component import BaseComponent
+from ..exceptions import Impossible
+from ..input_handlers import (
     ActionOrHandler,
     AreaRangedAttackHandler,
     SingleRangedAttackHandler,
 )
 
 if TYPE_CHECKING:
-    from entity import Actor, Item
+    from ..entity import Actor, Item
 
 
 class Consumable(BaseComponent):
@@ -36,7 +36,7 @@ class Consumable(BaseComponent):
         """Remove the consumed item from its containing inventory."""
         entity = self.parent
         inventory = entity.parent
-        if isinstance(inventory, components.inventory.Inventory):
+        if isinstance(inventory, components_inventory.Inventory):
             inventory.items.remove(entity)
 
 class ConfusionConsumable(Consumable):
@@ -67,7 +67,7 @@ class ConfusionConsumable(Consumable):
             f"The eyes of the {target.name} look vacant, as it starts to stumble around!",
             color.status_effect_applied,
         )
-        target.ai = components.ai.ConfusedEnemy(
+        target.ai = ai.ConfusedEnemy(
             entity=target, previous_ai=target.ai, turns_remaining=self.number_of_turns,
         )
         self.consume()

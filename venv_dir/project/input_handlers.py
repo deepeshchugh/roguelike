@@ -6,19 +6,19 @@ from typing import Callable, Optional, Tuple, TYPE_CHECKING, Union
 
 import tcod.event
 
-import actions
-from actions import (
+from . import actions
+from .actions import (
     Action,
     BumpAction,
     PickupAction,
     WaitAction
 )
-import color
-import exceptions
+from . import color
+from . import exceptions
 
 if TYPE_CHECKING:
-    from engine import Engine
-    from entity import Item
+    from .engine import Engine
+    from .entity import Item
 
 MOVE_KEYS = {
     # Arrow keys.

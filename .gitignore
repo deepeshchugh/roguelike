@@ -2,3 +2,4 @@
 venv_dir/Lib*
 venv_dir/Scripts*
 venv_dir/pyvenv.cfg
+*.vscode*
