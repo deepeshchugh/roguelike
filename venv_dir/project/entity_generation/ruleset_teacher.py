@@ -3,6 +3,9 @@ from l_star_inexperienced.teachers import Teacher
 from l_star_inexperienced.dfa.dfa import DFA
 
 from .rule_teacher import RuleTeacher
+from .maximum_monsters_rule import MaximumMonstersRule
+from .minimum_monsters_rule import MinimumMonstersRule
+
 from typing import List
 
 import random
@@ -57,7 +60,6 @@ class RulesetTeacher(Teacher):
     def find_counterexample(self, proposed_dfa: DFA):
         itr = 0
         while itr < ITER_LIMIT:
-            print(itr)
             random_word = self.get_random_word(alphabet=proposed_dfa.alphabet)
             if self.is_valid(random_word) is None:
                 itr += 1
@@ -88,3 +90,20 @@ class RulesetTeacher(Teacher):
             else:
                 word_array.append(alphabet[new_char_idx])
         return ''.join(word_array)
+
+if __name__ == "__main__":
+    new_teacher = RulesetTeacher()
+    new_teacher.set_rule_queue(
+        [
+            MinimumMonstersRule(0),
+            MaximumMonstersRule(1)
+        ]
+    )
+    print(new_teacher.membership_query("oT"))
+    new_teacher.set_rule_queue(
+        [
+            MinimumMonstersRule(0),
+            MaximumMonstersRule(2)
+        ]
+    )
+    print(new_teacher.membership_query("oT"))

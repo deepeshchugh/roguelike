@@ -27,3 +27,7 @@ class MaximumMonstersRule(RuleTeacher):
         if num_monsters > self.maximum_monsters:
             return CONST.NEG
         return CONST.POS
+
+if __name__ == "__main__":
+    print(MaximumMonstersRule(1).membership_query("oT"))
+    print(MaximumMonstersRule(2).membership_query("oT"))
