@@ -11,6 +11,7 @@ from .actions import (
     Action,
     BumpAction,
     PickupAction,
+    TakeStairsAction,
     WaitAction
 )
 from . import color
@@ -126,6 +127,8 @@ class EventHandler(BaseEventHandler):
                 return GameOverEventHandler(self.engine)
             elif self.engine.player.level.requires_level_up:
                 return LevelUpEventHandler(self.engine)
+            elif isinstance(action_or_state, TakeStairsAction):
+                return TakeStairsEventHandler(self.engine)
             return MainGameEventHandler(self.engine)  # Return to the main handler.
         return self
 
@@ -408,6 +411,73 @@ class LevelUpEventHandler(AskUserEventHandler):
         Don't allow the player to click to exit the menu, like normal.
         """
         return None
+
+class TakeStairsEventHandler(AskUserEventHandler):
+    TITLE = "Select a modifier"
+
+    def on_render(self, console: tcod.Console) -> None:
+        super().on_render(console)
+        
+        x = 0
+        console.draw_frame(
+            x=0,
+            y=0,
+            width=70,
+            height=8,
+            title=self.TITLE,
+            clear=True,
+            fg=(255, 255, 255),
+            bg=(0, 0, 0),
+        )
+
+        modifier_choices = self.get_random_choices()
+        console.print(x=x + 1, y=1, string="Congratulations! You found the entrance to the next floor!")
+        console.print(x=x + 1, y=2, string="Select a modifier for monster generation")
+        
+        console.print(
+            x=x + 1,
+            y=4,
+            string=f"a) " + modifier_choices[0],
+        )
+        console.print(
+            x=x + 1,
+            y=5,
+            string=f"b) " + modifier_choices[1],
+        )
+        console.print(
+            x=x + 1,
+            y=6,
+            string=f"c) " + modifier_choices[2],
+        )
+
+    def ev_keydown(self, event: tcod.event.KeyDown) -> Optional[ActionOrHandler]:
+        key = event.sym
+        index = key - tcod.event.K_a
+
+        if 0 <= index <= 2:
+            if index == 0:
+                print("Choice 1")
+            elif index == 1:
+                print("Choice 2")
+            else:
+                print("Choice 3")
+        else:
+            self.engine.message_log.add_message("Invalid entry.", color.invalid)
+
+            return None
+
+        return super().ev_keydown(event)
+
+    def ev_mousebuttondown(
+        self, event: tcod.event.MouseButtonDown
+    ) -> Optional[ActionOrHandler]:
+        """
+        Don't allow the player to click to exit the menu, like normal.
+        """
+        return None
+    
+    def get_random_choices(self):
+        return ["choice1", "choice2", "choice3"]
 
 class InventoryEventHandler(AskUserEventHandler):
     """This handler lets the user select an item.
