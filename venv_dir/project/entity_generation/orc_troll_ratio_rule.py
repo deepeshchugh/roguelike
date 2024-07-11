@@ -17,7 +17,7 @@ class OrcTrollRatioRule(RuleTeacher):
         for char in test_word.upper():
             if char == 'O':
                 num_orcs += 1
-            if char == 'T':
+            elif char == 'T':
                 num_trolls += 1
         if num_orcs == 0 or num_trolls == 0:
             return CONST.DONT_CARE

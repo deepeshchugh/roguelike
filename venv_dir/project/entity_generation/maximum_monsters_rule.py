@@ -18,8 +18,8 @@ class MaximumMonstersRule(RuleTeacher):
 
     @maximum_monsters.setter
     def maximum_monsters(self, value):
-        if value < 0:
-            raise Exception("Minimum monsters cannot be less than 0")
+        if value > MAXIMUM_MONSTERS_LIMIT:
+            raise Exception("Maximum monsters cannot be more than " + str(MAXIMUM_MONSTERS_LIMIT))
         self._maximum_monsters = value
     
     def membership_query(self, test_word):

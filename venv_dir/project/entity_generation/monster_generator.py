@@ -6,6 +6,9 @@ from .ruleset_teacher import RulesetTeacher
 
 from l_star_inexperienced.grinchtein_et_al.glp_algorithm import GlpAlgorithm
 
+import random
+
+
 MONSTER_ALPHABET = ['o', 'T']
 
 class MonsterGenerator():
@@ -60,6 +63,51 @@ class MonsterGenerator():
             if duplicate_rule is not None:
                 removed_rules.append(duplicate_rule)
             # TODO raise messages of deleted rules
+    
+    def get_monster_string(self) -> str:
+        search_queue = []
+        first_state = self.current_dfa.first_state
+        choose_last_string_probability = 15
+        valid_string_found = False
+        valid_string = None
+
+        search_queue.append([first_state, 0, ""])
+        current_depth = 0
+        
+        if self.current_dfa.is_state_final(first_state):
+            valid_string = ""
+            valid_string_found = True
+        while True:
+            popped_entry = search_queue.pop(0)
+            current_depth = popped_entry[1]
+
+            if valid_string_found:
+                print(valid_string)
+                choose_last_string = random.choices([True, False], weights=[choose_last_string_probability, 100 - choose_last_string_probability])
+                if choose_last_string[0]:
+                    return valid_string
+                elif len(search_queue) > 0 and search_queue[0][1] > current_depth:
+                    choose_last_string_probability += 10
+            
+            orc_entry = [
+                self.current_dfa.delta[popped_entry[0]]['o'],
+                popped_entry[1] + 1,
+                popped_entry[2] + 'o'
+            ]
+            if self.current_dfa.is_state_final(orc_entry[0]):
+                valid_string_found = True
+                valid_string = orc_entry[2]
+            troll_entry = [
+                self.current_dfa.delta[popped_entry[0]]['T'],
+                popped_entry[1] + 1,
+                popped_entry[2] + 'T'
+            ]
+            if self.current_dfa.is_state_final(troll_entry[0]):
+                valid_string_found = True
+                valid_string = troll_entry[2]
+            search_queue.append(orc_entry)
+            search_queue.append(troll_entry)
+            
 
 if __name__ == "__main__":
     monster_generator = MonsterGenerator()
@@ -74,6 +122,12 @@ if __name__ == "__main__":
     dfa = monster_generator.current_dfa
     if dfa is not None:
         dfa.print_parameters()
+    monster_generator.add_rule(MinimumMonstersRule(1))
+    dfa = monster_generator.current_dfa
+    if dfa is not None:
+        dfa.print_parameters()
+
+    print(monster_generator.get_monster_string())
         
 
 

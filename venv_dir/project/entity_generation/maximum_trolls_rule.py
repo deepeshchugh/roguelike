@@ -6,21 +6,21 @@ CONST = _Const()
 # Placing this due to DFA and Room restrictions
 MAXIMUM_MONSTERS_LIMIT = 5
 
-class MaximumOrcsRule(RuleTeacher):
+class MaximumTrollsRule(RuleTeacher):
 
-    def __init__(self, maximum_orcs):
+    def __init__(self, maximum_trolls):
         super().__init__(is_mandatory=True)
-        self.maximum_orcs = maximum_orcs
+        self.maximum_trolls = maximum_trolls
 
     @property
-    def maximum_orcs(self):
-        return self._maximum_orcs
+    def maximum_trolls(self):
+        return self._maximum_trolls
 
-    @maximum_orcs.setter
-    def maximum_orcs(self, value):
+    @maximum_trolls.setter
+    def maximum_trolls(self, value):
         if value > MAXIMUM_MONSTERS_LIMIT:
             raise Exception("Maximum monsters cannot be more than " + str(MAXIMUM_MONSTERS_LIMIT))
-        self._maximum_orcs = value
+        self._maximum_trolls = value
     
     def membership_query(self, test_word):
         num_orcs = 0
@@ -30,10 +30,11 @@ class MaximumOrcsRule(RuleTeacher):
                 num_orcs += 1
             elif char == 'T':
                 num_trolls += 1
-        if num_orcs > self.maximum_orcs:
+        if num_trolls > self.maximum_trolls:
             return CONST.NEG
         return CONST.DONT_CARE
 
 if __name__ == "__main__":
-    print(MaximumOrcsRule(1).membership_query("oT"))
-    print(MaximumOrcsRule(1).membership_query("ooT"))
+    print(MaximumTrollsRule(1).membership_query("oT"))
+    print(MaximumTrollsRule(1).membership_query("ooT"))
+    print(MaximumTrollsRule(1).membership_query("oTT"))
