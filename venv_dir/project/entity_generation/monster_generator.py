@@ -1,3 +1,4 @@
+from .maximum_trolls_rule import MaximumTrollsRule
 from .monster_generator_utils import get_duplicate_rule
 from .rule_teacher import RuleTeacher
 from .maximum_monsters_rule import MaximumMonstersRule
@@ -17,11 +18,13 @@ class MonsterGenerator():
         self.ruleset_teacher = RulesetTeacher()
         self.initialize_default_rules()
         self.current_dfa = self.get_new_dfa() # Will always succeed
+        print("Initialized monster generator")
 
     def initialize_default_rules(self):
         new_rule_queue = []
         new_rule_queue.append(MinimumMonstersRule(0))
-        new_rule_queue.append(MaximumMonstersRule(1))
+        new_rule_queue.append(MaximumMonstersRule(2))
+        new_rule_queue.append(MaximumTrollsRule(0))
         self.ruleset_teacher.set_rule_queue(new_rule_queue=new_rule_queue)
 
     def get_new_dfa(self):
@@ -67,7 +70,7 @@ class MonsterGenerator():
     def get_monster_string(self) -> str:
         search_queue = []
         first_state = self.current_dfa.first_state
-        choose_last_string_probability = 15
+        choose_last_string_probability = 25
         valid_string_found = False
         valid_string = None
 
@@ -94,38 +97,41 @@ class MonsterGenerator():
                 popped_entry[1] + 1,
                 popped_entry[2] + 'o'
             ]
-            if self.current_dfa.is_state_final(orc_entry[0]):
-                valid_string_found = True
-                valid_string = orc_entry[2]
             troll_entry = [
                 self.current_dfa.delta[popped_entry[0]]['T'],
                 popped_entry[1] + 1,
                 popped_entry[2] + 'T'
             ]
-            if self.current_dfa.is_state_final(troll_entry[0]):
-                valid_string_found = True
-                valid_string = troll_entry[2]
             search_queue.append(orc_entry)
             search_queue.append(troll_entry)
-            
+            if self.current_dfa.is_state_final(orc_entry[0]):
+                valid_string_found = True
+                if self.current_dfa.is_state_final(troll_entry[0]):
+                    valid_string = random.choice([troll_entry[2], orc_entry[2]])
+                else:
+                    valid_string = orc_entry[2]
+            elif self.current_dfa.is_state_final(troll_entry[0]):
+                valid_string_found = True
+                valid_string = troll_entry[2]
+
 
 if __name__ == "__main__":
     monster_generator = MonsterGenerator()
-    dfa = monster_generator.current_dfa
-    if dfa is not None:
-        dfa.print_parameters()
-    monster_generator.add_rule(MaximumMonstersRule(2))
-    dfa = monster_generator.current_dfa
-    if dfa is not None:
-        dfa.print_parameters()
-    monster_generator.add_rule(MinimumMonstersRule(3))
-    dfa = monster_generator.current_dfa
-    if dfa is not None:
-        dfa.print_parameters()
-    monster_generator.add_rule(MinimumMonstersRule(1))
-    dfa = monster_generator.current_dfa
-    if dfa is not None:
-        dfa.print_parameters()
+    # dfa = monster_generator.current_dfa
+    # if dfa is not None:
+    #     dfa.print_parameters()
+    # monster_generator.add_rule(MaximumMonstersRule(2))
+    # dfa = monster_generator.current_dfa
+    # if dfa is not None:
+    #     dfa.print_parameters()
+    # monster_generator.add_rule(MinimumMonstersRule(3))
+    # dfa = monster_generator.current_dfa
+    # if dfa is not None:
+    #     dfa.print_parameters()
+    # monster_generator.add_rule(MinimumMonstersRule(1))
+    # dfa = monster_generator.current_dfa
+    # if dfa is not None:
+    #     dfa.print_parameters()
 
     print(monster_generator.get_monster_string())
         

@@ -5,6 +5,8 @@ from typing import Dict, Iterator, List, Tuple, TYPE_CHECKING
 
 import tcod
 
+from .entity_generation.monster_generator import MonsterGenerator
+
 from .entity_generation import entity_factories
 from .game_map import GameMap
 from . import tile_types
@@ -50,6 +52,17 @@ def get_max_value_for_floor(
             current_value = value
 
     return current_value
+
+def get_monsters_at_random(monster_generator: MonsterGenerator)  -> List[Entity]:
+    monster_string = monster_generator.get_monster_string()
+    monster_list = []
+    for char in monster_string:
+        if char == 'o':
+            monster_list.append(entity_factories.orc)
+        elif char == 'T':
+            monster_list.append(entity_factories.troll)
+    return monster_list
+
 
 def get_entities_at_random(
     weighted_chances_by_floor: Dict[int, List[Tuple[Entity, int]]],
@@ -105,15 +118,12 @@ class RectangularRoom:
             and self.y2 >= other.y1
         )
 
-def place_entities(room: RectangularRoom, dungeon: GameMap, floor_number: int,) -> None:
-    number_of_monsters = random.randint(
-        0, get_max_value_for_floor(max_monsters_by_floor, floor_number)
-    )
+def place_entities(room: RectangularRoom, dungeon: GameMap, floor_number: int, monster_generator: MonsterGenerator) -> None:
     number_of_items = random.randint(
         0, get_max_value_for_floor(max_items_by_floor, floor_number)
     )
-    monsters: List[Entity] = get_entities_at_random(
-        enemy_chances, number_of_monsters, floor_number
+    monsters: List[Entity] = get_monsters_at_random(
+        monster_generator=monster_generator
     )
     items: List[Entity] = get_entities_at_random(
         item_chances, number_of_items, floor_number
@@ -188,7 +198,8 @@ def generate_dungeon(
             
             center_of_last_room = new_room.center
 
-        place_entities(new_room, dungeon, engine.game_world.current_floor)
+        place_entities(new_room, dungeon, 
+                       engine.game_world.current_floor, engine.monster_generator)
 
         dungeon.tiles[center_of_last_room] = tile_types.down_stairs
         dungeon.downstairs_location = center_of_last_room

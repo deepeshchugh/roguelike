@@ -9,9 +9,11 @@ from typing import Optional
 
 import tcod
 
+
 from . import color
 from .engine import Engine
 from .entity_generation import entity_factories as entity_factories
+from .entity_generation.monster_generator import MonsterGenerator
 from .game_map import GameWorld
 from . import input_handlers
 print("Imported")
@@ -36,6 +38,8 @@ def new_game() -> Engine:
     player = copy.deepcopy(entity_factories.player)
 
     engine = Engine(player=player)
+
+    engine.monster_generator = MonsterGenerator()
 
     engine.game_world = GameWorld(
         engine=engine,

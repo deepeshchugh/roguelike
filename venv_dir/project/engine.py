@@ -7,6 +7,8 @@ from typing import TYPE_CHECKING
 from tcod.console import Console
 from tcod.map import compute_fov
 
+from .entity_generation.monster_generator import MonsterGenerator
+
 from . import exceptions
 from .message_log import MessageLog
 from . import render_functions
@@ -18,6 +20,7 @@ if TYPE_CHECKING:
 class Engine:
     game_map: GameMap
     game_world: GameWorld
+    monster_generator: MonsterGenerator
 
     def __init__(self, player: Actor):
         self.message_log = MessageLog()
