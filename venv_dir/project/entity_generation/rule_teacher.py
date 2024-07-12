@@ -13,3 +13,9 @@ class RuleTeacher(Teacher):
     '''
     def __init__(self, is_mandatory):
         self.is_mandatory = is_mandatory
+
+    def __str__(self):
+        return self.get_rule_text()
+    
+    def get_rule_text(self):
+        return "Default rule text (You shouldn't be seeing this!)"

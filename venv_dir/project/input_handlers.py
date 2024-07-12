@@ -17,6 +17,8 @@ from .actions import (
 from . import color
 from . import exceptions
 
+from .entity_generation.rule_teacher import RuleTeacher
+
 if TYPE_CHECKING:
     from .engine import Engine
     from .entity import Item
@@ -415,6 +417,10 @@ class LevelUpEventHandler(AskUserEventHandler):
 class TakeStairsEventHandler(AskUserEventHandler):
     TITLE = "Select a modifier"
 
+    def __init__(self, engine: Engine):
+        self.engine = engine
+        self.modifiers_set = False
+
     def on_render(self, console: tcod.Console) -> None:
         super().on_render(console)
         
@@ -429,43 +435,54 @@ class TakeStairsEventHandler(AskUserEventHandler):
             fg=(255, 255, 255),
             bg=(0, 0, 0),
         )
-
-        modifier_choices = self.get_random_choices()
-        console.print(x=x + 1, y=1, string="Congratulations! You found the entrance to the next floor!")
-        console.print(x=x + 1, y=2, string="Select a modifier for monster generation")
-        
-        console.print(
-            x=x + 1,
-            y=4,
-            string=f"a) " + modifier_choices[0],
-        )
-        console.print(
-            x=x + 1,
-            y=5,
-            string=f"b) " + modifier_choices[1],
-        )
-        console.print(
-            x=x + 1,
-            y=6,
-            string=f"c) " + modifier_choices[2],
-        )
+        if not self.modifiers_set:
+            modifier_choices = self.engine.monster_generator.get_new_potential_rules()
+            self.modifier_choices = modifier_choices
+            self.modifiers_set = True
+        if len(self.modifier_choices) == 0:
+            console.print(x=x + 1, y=1, string="Congratulations! You found the entrance to the next floor!")
+            console.print(x=x + 1, y=1, string="No more modifiers possible! Press any key to continue..")
+        else:
+            console.print(x=x + 1, y=2, string="Select a modifier for monster generation")
+            
+            console.print(
+                x=x + 1,
+                y=4,
+                string=f"a) " + self.modifier_choices[0].get_rule_text(),
+            )
+            if len(self.modifier_choices) > 1:
+                console.print(
+                    x=x + 1,
+                    y=5,
+                    string=f"b) " + self.modifier_choices[1].get_rule_text(),
+                )
+            if len(self.modifier_choices) > 2:
+                console.print(
+                    x=x + 1,
+                    y=6,
+                    string=f"c) " + self.modifier_choices[2].get_rule_text(),
+                )
 
     def ev_keydown(self, event: tcod.event.KeyDown) -> Optional[ActionOrHandler]:
         key = event.sym
         index = key - tcod.event.K_a
-
-        if 0 <= index <= 2:
-            if index == 0:
-                print("Choice 1")
-            elif index == 1:
-                print("Choice 2")
+        if len(self.modifier_choices) > 0:
+            if 0 <= index <= 2:
+                is_rule_added = False
+                if index == 0:
+                    is_rule_added = self.add_rule(self.modifier_choices[0], 0)
+                elif len(self.modifier_choices) > 1 and index == 1:
+                    is_rule_added = self.add_rule(self.modifier_choices[1], 1)
+                elif len(self.modifier_choices) > 2 and index == 2:
+                    is_rule_added = self.add_rule(self.modifier_choices[2], 2)
+                if not is_rule_added:
+                    return None 
             else:
-                print("Choice 3")
-        else:
-            self.engine.message_log.add_message("Invalid entry.", color.invalid)
+                self.engine.message_log.add_message("Invalid entry.", color.invalid)
 
-            return None
-
+                return None
+        self.engine.game_world.generate_floor()
+        self.engine.update_fov()
         return super().ev_keydown(event)
 
     def ev_mousebuttondown(
@@ -476,8 +493,16 @@ class TakeStairsEventHandler(AskUserEventHandler):
         """
         return None
     
-    def get_random_choices(self):
-        return ["choice1", "choice2", "choice3"]
+    def add_rule(self, modifier_rule: RuleTeacher, modifier_idx: int):
+        removed_rules = self.engine.monster_generator.add_rule(modifier_rule)
+        if removed_rules is None:
+            self.engine.message_log.add_message("Oh No! That rule didnt work, try another one.", color.error)
+            self.modifier_choices.pop(modifier_idx)
+            return False
+        self.engine.message_log.add_message("Added modifier: " + modifier_rule.get_rule_text(), color.rule_added)
+        for removed_rule in removed_rules:
+            self.engine.message_log.add_message("Removed modifier: " + removed_rule.get_rule_text(), color.rule_removed)
+        return True
 
 class InventoryEventHandler(AskUserEventHandler):
     """This handler lets the user select an item.

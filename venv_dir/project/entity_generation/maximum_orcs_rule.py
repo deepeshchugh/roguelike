@@ -33,7 +33,11 @@ class MaximumOrcsRule(RuleTeacher):
         if num_orcs > self.maximum_orcs:
             return CONST.NEG
         return CONST.DONT_CARE
+    
+    def get_rule_text(self):
+        return "More Orcs! Raise maximum orcs to {max}".format(max=self.maximum_orcs)
 
 if __name__ == "__main__":
     print(MaximumOrcsRule(1).membership_query("oT"))
     print(MaximumOrcsRule(1).membership_query("ooT"))
+    print(MaximumOrcsRule(1).get_rule_text())

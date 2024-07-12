@@ -1,4 +1,3 @@
-from cgi import test
 from .rule_teacher import RuleTeacher
 from l_star_inexperienced.common.constants import _Const
 
@@ -25,3 +24,9 @@ class OrcTrollRatioRule(RuleTeacher):
              if int(num_orcs/num_trolls) == int(self.orc_ratio/self.troll_ratio):
                  return CONST.DONT_CARE
         return CONST.NEG
+    
+    def get_rule_text(self):
+        return "Monster Formation! Orcs and Trolls band together as {orc_ratio}:{troll_ratio}".format(orc_ratio=self.orc_ratio, troll_ratio=self.troll_ratio)
+    
+if __name__ == "__main__":
+    print(OrcTrollRatioRule(orc_ratio=1, troll_ratio=3).get_rule_text())

@@ -24,3 +24,9 @@ class MinimumMonstersRule(RuleTeacher):
         if num_monsters < self.minimum_monsters:
             return CONST.NEG
         return CONST.POS
+    
+    def get_rule_text(self):
+        return "More Monsters! Raise minimum monsters to {min}".format(min=self.minimum_monsters)
+
+if __name__ == "__main__":
+    print(MinimumMonstersRule(minimum_monsters=1).get_rule_text())

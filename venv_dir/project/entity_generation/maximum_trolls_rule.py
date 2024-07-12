@@ -34,7 +34,11 @@ class MaximumTrollsRule(RuleTeacher):
             return CONST.NEG
         return CONST.DONT_CARE
 
+    def get_rule_text(self):
+        return "More Trolls! Raise maximum trolls to {max}".format(max=self.maximum_trolls)
+
 if __name__ == "__main__":
     print(MaximumTrollsRule(1).membership_query("oT"))
     print(MaximumTrollsRule(1).membership_query("ooT"))
     print(MaximumTrollsRule(1).membership_query("oTT"))
+    print(MaximumTrollsRule(1).get_rule_text())

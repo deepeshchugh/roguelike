@@ -31,7 +31,11 @@ class MinimumOrcsRule(RuleTeacher):
             return CONST.NEG
         return CONST.DONT_CARE
 
+    def get_rule_text(self):
+        return "More Orcs! Raise minimum orcs to {min}".format(min=self.minimum_orcs)
+
 if __name__ == "__main__":
     print(MinimumOrcsRule(1).membership_query("T"))
     print(MinimumOrcsRule(1).membership_query("ooT"))
     print(MinimumOrcsRule(1).membership_query("oTT"))
+    print(MinimumOrcsRule(1).get_rule_text())

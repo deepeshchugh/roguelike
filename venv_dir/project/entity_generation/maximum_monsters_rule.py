@@ -28,6 +28,10 @@ class MaximumMonstersRule(RuleTeacher):
             return CONST.NEG
         return CONST.POS
 
+    def get_rule_text(self):
+        return "More Monsters! Raise maximum monsters to {max}".format(max=self.maximum_monsters)
+    
 if __name__ == "__main__":
     print(MaximumMonstersRule(1).membership_query("oT"))
     print(MaximumMonstersRule(2).membership_query("oT"))
+    print(MaximumMonstersRule(2).get_rule_text())

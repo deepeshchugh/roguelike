@@ -31,7 +31,12 @@ class MinimumTrollsRule(RuleTeacher):
             return CONST.NEG
         return CONST.DONT_CARE
 
+    def get_rule_text(self):
+        return "More Trolls! Raise minimum trolls to {min}".format(min=self.minimum_trolls)
+
+
 if __name__ == "__main__":
     print(MinimumTrollsRule(1).membership_query("o"))
     print(MinimumTrollsRule(1).membership_query("ooT"))
     print(MinimumTrollsRule(1).membership_query("oTT"))
+    print(MinimumTrollsRule(1).get_rule_text())
