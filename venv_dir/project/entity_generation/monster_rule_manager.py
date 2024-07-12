@@ -79,7 +79,6 @@ class MonsterRuleManager():
     
     def is_max_monsters_possible(self) -> bool:
         if self.max_total < MAXIMUM_MONSTERS_LIMIT:
-            if self.is_max_orcs_set and self.is_max_trolls_set:
                 return True
         return False
     
