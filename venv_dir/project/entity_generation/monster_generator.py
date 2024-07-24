@@ -11,6 +11,7 @@ from .rule_teacher import RuleTeacher
 from .ruleset_teacher import RulesetTeacher
 
 from l_star_inexperienced.grinchtein_et_al.glp_algorithm import GlpAlgorithm
+from l_star_inexperienced.dfa.dfa import DFA
 from typing import List
 
 import random
@@ -40,9 +41,12 @@ class MonsterGenerator():
         new_rule_queue.append(MaximumMonstersRule(1))
         self.ruleset_teacher.set_rule_queue(new_rule_queue=new_rule_queue)
 
-    def get_new_dfa(self):
+    def get_new_dfa(self) -> DFA:
         glp_runner = GlpAlgorithm(alphabet=MONSTER_ALPHABET, teacher=self.ruleset_teacher)
         return glp_runner.run()
+    
+    def viz_dfa(self):
+        self.current_dfa.visualize()
 
     def add_rule(self, new_rule : RuleTeacher) -> bool:
         #TODO add rule manager consequences of rule addition

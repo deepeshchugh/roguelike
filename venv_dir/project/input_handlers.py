@@ -194,6 +194,8 @@ class MainGameEventHandler(EventHandler):
             return InventoryDropHandler(self.engine)
         elif key == tcod.event.K_c:
             return CharacterScreenEventHandler(self.engine)
+        elif key == tcod.event.K_z:
+            return actions.VizDFAAction(player)
         elif key == tcod.event.K_SLASH:
             return LookHandler(self.engine)
 

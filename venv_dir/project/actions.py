@@ -93,6 +93,10 @@ class WaitAction(Action):
     def perform(self) -> None:
         pass
 
+class VizDFAAction(Action):
+    def perform(self) -> None:
+        self.engine.monster_generator.viz_dfa()
+
 class TakeStairsAction(Action):
     def perform(self) -> None:
         """

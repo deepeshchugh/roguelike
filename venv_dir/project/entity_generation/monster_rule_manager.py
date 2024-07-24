@@ -8,7 +8,7 @@ from .orc_troll_ratio_rule import OrcTrollRatioRule
 
 import random
 
-MAXIMUM_MONSTERS_LIMIT = 7
+MAXIMUM_MONSTERS_LIMIT = 5
 
 class MonsterRuleManager():
     def __init__(self, minimum_monsters, maximum_monsters):
