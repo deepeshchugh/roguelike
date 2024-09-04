@@ -1,5 +1,9 @@
 from __future__ import annotations
 
+'''
+This code in this file is written completely or partially based on this tutorial:
+https://rogueliketutorials.com/tutorials/tcod/v2/
+'''
 from typing import List, TYPE_CHECKING
 
 from .base_component import BaseComponent

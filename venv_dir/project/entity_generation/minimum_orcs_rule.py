@@ -27,7 +27,7 @@ class MinimumOrcsRule(RuleTeacher):
                 num_orcs += 1
             elif char == 'T':
                 num_trolls += 1
-        if num_trolls < self.minimum_orcs:
+        if num_orcs < self.minimum_orcs:
             return CONST.NEG
         return CONST.DONT_CARE
 

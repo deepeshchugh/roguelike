@@ -1,3 +1,7 @@
+'''
+This code in this file is written completely or partially based on this tutorial:
+https://rogueliketutorials.com/tutorials/tcod/v2/
+'''
 from typing import Iterable, List, Reversible, Tuple
 import textwrap
 

@@ -1,5 +1,8 @@
 from __future__ import annotations
-
+'''
+This code in this file is written completely or partially based on this tutorial:
+https://rogueliketutorials.com/tutorials/tcod/v2/
+'''
 import os
 
 from typing import Callable, Optional, Tuple, TYPE_CHECKING, Union
@@ -239,7 +242,7 @@ class HistoryViewer(EventHandler):
         # Draw a frame with a custom banner title.
         log_console.draw_frame(0, 0, log_console.width, log_console.height)
         log_console.print_box(
-            0, 0, log_console.width, 1, "┤Message history├", alignment=tcod.CENTER
+            0, 0, log_console.width, 1, "--Message history--", alignment=tcod.CENTER
         )
 
         # Render the message log using the cursor parameter.

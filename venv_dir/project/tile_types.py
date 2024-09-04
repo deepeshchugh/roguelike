@@ -1,3 +1,7 @@
+'''
+This code in this file is written completely or partially based on this tutorial:
+https://rogueliketutorials.com/tutorials/tcod/v2/
+'''
 from typing import Tuple
 
 import numpy as np  # type: ignore

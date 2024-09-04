@@ -1,5 +1,8 @@
 from __future__ import annotations
-
+'''
+This code in this file is written completely or partially based on this tutorial:
+https://rogueliketutorials.com/tutorials/tcod/v2/
+'''
 import copy
 import math
 from typing import Optional, Tuple, Type, TypeVar, TYPE_CHECKING, Union

@@ -1,3 +1,8 @@
+'''
+This code in this file is written completely or partially based on this tutorial:
+https://rogueliketutorials.com/tutorials/tcod/v2/
+'''
+
 white = (0xFF, 0xFF, 0xFF)
 black = (0x0, 0x0, 0x0)
 red = (0xFF, 0x0, 0x0)

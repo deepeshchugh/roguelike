@@ -49,7 +49,6 @@ class MonsterGenerator():
         self.current_dfa.visualize()
 
     def add_rule(self, new_rule : RuleTeacher) -> bool:
-        #TODO add rule manager consequences of rule addition
         old_rule_queue = self.ruleset_teacher.get_rule_queue()
         
         duplicate_rule = get_duplicate_rule(old_rule_queue, new_rule)
@@ -152,23 +151,9 @@ class MonsterGenerator():
 
 if __name__ == "__main__":
     monster_generator = MonsterGenerator()
-    # dfa = monster_generator.current_dfa
-    # if dfa is not None:
-    #     dfa.print_parameters()
-    # monster_generator.add_rule(MaximumMonstersRule(2))
-    # dfa = monster_generator.current_dfa
-    # if dfa is not None:
-    #     dfa.print_parameters()
-    # monster_generator.add_rule(MinimumMonstersRule(3))
-    # dfa = monster_generator.current_dfa
-    # if dfa is not None:
-    #     dfa.print_parameters()
+    print(monster_generator.get_monster_string())
+        
     # monster_generator.add_rule(MinimumMonstersRule(1))
     # dfa = monster_generator.current_dfa
     # if dfa is not None:
     #     dfa.print_parameters()
-
-    print(monster_generator.get_monster_string())
-        
-
-
